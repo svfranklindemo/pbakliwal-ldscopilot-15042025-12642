@@ -1,7 +1,19 @@
 {
-  "mappings": [
-    "/content/pbakliwal/eds-crosswalk-source/:/",
-    "/content/pbakliwal/eds-crosswalk-source/metadata.json:/metadata.json",
-    "/content/pbakliwal/eds-crosswalk-source/redirects.json:/redirects.json"
-  ]
+    "mappings": [
+      "/content/pbakliwal/maybelline-new-york/:/",
+      "/content/pbakliwal/maybelline-new-york/configuration:/.helix/config.json",
+      "/content/pbakliwal/maybelline-new-york/metadata:/metadata.json",
+      "/content/pbakliwal/maybelline-new-york/configs:/configs.json",
+      "/content/pbakliwal/maybelline-new-york/configs-stage:/configs-stage.json",
+      "/content/pbakliwal/maybelline-new-york/configs-dev:/configs-dev.json",
+      "/content/pbakliwal/maybelline-new-york/redirects:/redirects.json",
+      "/content/pbakliwal/maybelline-new-york/placeholders:/placeholders.json",
+      "/content/pbakliwal/maybelline-new-york/products/recommended-products:/products/recommended-products.json",
+      "/content/pbakliwal/maybelline-new-york/enrichment/enrichment:/enrichment/enrichment.json",
+      "/content/pbakliwal/maybelline-new-york/images/products/:/images/products/"
+    ],
+    "includes": [
+      "/content/pbakliwal/maybelline-new-york",
+      "/content/dam/citisignal/images/products/"
+    ]
 }

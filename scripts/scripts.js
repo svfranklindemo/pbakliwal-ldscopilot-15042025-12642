@@ -305,7 +305,12 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     await initAnalyticsTrackingQueue();
+    
     decorateMain(main);
+    
+    // wait for atjs to finish loading
+    await atjsPromise;
+    
     await waitForLCP(LCP_BLOCKS);
   }
 }

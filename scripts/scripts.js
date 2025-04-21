@@ -32,8 +32,8 @@ import { uploadAsset } from './asset-upload.js';
 const pluginContext = {
   getAllMetadata,
   getMetadata,
-  loadCSS,  
-  sampleRUM, 
+  loadCSS,
+  sampleRUM,
 };
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -211,7 +211,8 @@ export function decorateMain(main) {
   decorateDefaultBlock();
 }
 
-/* Target related code */
+/* Target AT.js related code */
+/*
 function initATJS(path, config) {
   window.targetGlobalSettings = config;
   return new Promise((resolve) => {
@@ -285,8 +286,8 @@ if (getMetadata('target')) {
     withWebGLRenderer: false,
   });
   document.addEventListener('at-library-loaded', () => getAndApplyOffers());
-}
-/* Target endline */
+}*/
+/* Target AT.js end-line */
 
 /**
  * loads everything needed to get to LCP.
@@ -305,12 +306,12 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     await initAnalyticsTrackingQueue();
-    
+
     decorateMain(main);
-    
-    // wait for atjs to finish loading
-    await atjsPromise;
-    
+
+    // wait for at.js to finish loading
+    // await atjsPromise;
+
     await waitForLCP(LCP_BLOCKS);
   }
 }

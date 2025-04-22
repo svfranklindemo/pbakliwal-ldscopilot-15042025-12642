@@ -43,28 +43,44 @@ fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug='
 .then(response => {
 
 const backgroundImage = response.data.adventureList.items[0].primaryImage._path;
+if(backgroundImage){
 document.getElementById(adventureDiv.id).innerHTML = "<section><img src=" + AEM_HOST + backgroundImage + "></section>";  
+}
 
 const adventureTitle = response.data.adventureList.items[0].title;
+if(adventureTitle){
 document.getElementById(adventureDiv.id).innerHTML += "<section><h3>"+ adventureTitle + "</h3></section>";
+}
 
 const adventureDesc = response.data.adventureList.items[0].description.plaintext;
+if(adventureDesc){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureDesc + "</section>";
+}
 
 const adventureType = response.data.adventureList.items[0].adventureType;
+if(adventureType){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Adventure Type: " + adventureType + "</section>";
+}
 
 const tripLength = response.data.adventureList.items[0].tripLength;
+if(tripLength){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" +"Trip Length: " + tripLength + "</section>";
+}
 
 const tripDifficulty = response.data.adventureList.items[0].difficulty;
+if(tripDifficulty){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Difficulty: " + tripDifficulty + "</section>";
+}
 
 const groupSize = response.data.adventureList.items[0].groupSize;
+if(groupSize){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Group Size: " + groupSize + "</section>";
+}
 
 const tripItinerary= response.data.adventureList.items[0].itinerary.html;
+if(tripItinerary){
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Itinerary: </br>" + tripItinerary + "</section>";
+}
 
 })
 .catch(error => {

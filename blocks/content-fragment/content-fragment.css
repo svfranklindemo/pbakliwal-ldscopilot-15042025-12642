@@ -1,87 +1,78 @@
 #adventure {
-  max-width: 1400px;
-  margin: 2rem auto;
-  padding: 2rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-}
-
-#adventure:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .content-fragment-wrapper {
   display: grid;
-  grid-template-columns: 45% 55%;
-  gap: 3rem;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 0;
   align-items: start;
 }
 
 /* Image Section */
 .adventure-image {
-  position: sticky !important;
-  top: 2rem !important;
-  border-radius: 16px;
+  position: relative !important;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.adventure-image:hover {
-  transform: scale(1.02);
 }
 
 .adventure-image img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   object-fit: cover;
   vertical-align: middle;
 }
 
 /* Content Container */
 .adventure-content {
-  padding-right: 2rem;
+  padding: 4rem;
+  height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(to right, #fff5f5, #fff);
 }
 
 /* Title Section */
 .adventure-title h3 {
-  font-size: 2.8rem;
+  font-size: 3.5rem;
   color: #2d3436;
-  margin: 0 0 1.5rem;
+  margin: 0 0 2rem;
   font-weight: 700;
   line-height: 1.2;
 }
 
 /* Description Section */
 .adventure-description {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.8;
   color: #636e72;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
 }
 
 /* Info Cards Container */
 .adventure-info-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .info-card {
-  background: #f8f9fa;
-  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem;
   border-radius: 12px;
   border: 1px solid #e9ecef;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  backdrop-filter: blur(10px);
 }
 
 .info-card:hover {
@@ -106,15 +97,16 @@
 
 /* Itinerary Section */
 .adventure-itinerary {
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.8);
   padding: 2rem;
   border-radius: 16px;
   border: 1px solid #e9ecef;
   margin-top: 2rem;
+  backdrop-filter: blur(10px);
 }
 
 .adventure-itinerary h4 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #2d3436;
   margin: 0 0 1.5rem;
   font-weight: 600;
@@ -126,7 +118,8 @@
 }
 
 .itinerary-content p {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
 }
 
 /* Animation */
@@ -151,6 +144,7 @@
   background: #fff5f5;
   border-radius: 12px;
   border: 1px solid #ffe3e3;
+  margin: 2rem;
 }
 
 .error-message h3 {
@@ -162,18 +156,33 @@
   color: #495057;
 }
 
+/* Custom Scrollbar */
+.adventure-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.adventure-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.adventure-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.adventure-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .content-fragment-wrapper {
-    gap: 2rem;
-  }
-  
-  .adventure-image img {
-    height: 500px;
+  .adventure-content {
+    padding: 3rem;
   }
   
   .adventure-title h3 {
-    font-size: 2.4rem;
+    font-size: 3rem;
   }
 }
 
@@ -183,12 +192,13 @@
   }
 
   .adventure-image {
-    position: relative !important;
-    top: 0 !important;
+    height: 50vh;
   }
 
   .adventure-content {
-    padding-right: 0;
+    height: auto;
+    min-height: 50vh;
+    padding: 2.5rem;
   }
 
   .adventure-info-cards {
@@ -197,17 +207,16 @@
 }
 
 @media (max-width: 768px) {
-  #adventure {
-    margin: 1rem;
-    padding: 1rem;
+  .adventure-content {
+    padding: 2rem;
   }
 
-  .adventure-image img {
-    height: 300px;
+  .adventure-image {
+    height: 40vh;
   }
 
   .adventure-title h3 {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .adventure-info-cards {

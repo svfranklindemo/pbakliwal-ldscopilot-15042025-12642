@@ -1,25 +1,29 @@
-#adventure {
+.content-fragment.block {
   width: 100%;
-  max-width: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: #ffffff;
+  background: linear-gradient(120deg, #fdf2f8 0%, #fff1f2 50%, #fff 100%);
+}
+
+#adventure-maybelline-lifestyle-inspiration {
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
 .content-fragment-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 40% 60%;
   width: 100%;
-  gap: 0;
-  align-items: start;
+  min-height: 100vh;
+  background: transparent;
 }
 
 /* Image Section */
 .adventure-image {
-  position: relative !important;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -28,98 +32,88 @@
   height: 100%;
   object-fit: cover;
   vertical-align: middle;
+  transition: transform 0.6s ease;
+}
+
+.adventure-image:hover img {
+  transform: scale(1.05);
 }
 
 /* Content Container */
 .adventure-content {
-  padding: 4rem;
-  height: 100vh;
-  overflow-y: auto;
-  background: linear-gradient(to right, #fff5f5, #fff);
+  padding: 5rem 6rem;
+  background: linear-gradient(135deg, rgba(255, 245, 245, 0.8), rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  position: relative;
+}
+
+.adventure-content::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(253, 242, 248, 0.3) 0%, rgba(255, 241, 242, 0.3) 100%);
+  pointer-events: none;
 }
 
 /* Title Section */
 .adventure-title h3 {
-  font-size: 3.5rem;
-  color: #2d3436;
-  margin: 0 0 2rem;
+  font-size: 3.2rem;
+  color: #1a1a1a;
+  margin: 0;
   font-weight: 700;
   line-height: 1.2;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
 }
 
 /* Description Section */
 .adventure-description {
   font-size: 1.2rem;
   line-height: 1.8;
-  color: #636e72;
-  margin-bottom: 3rem;
+  color: #4a4a4a;
+  position: relative;
+}
+
+.adventure-description p {
+  margin: 0;
+  white-space: pre-line;
 }
 
 /* Info Cards Container */
 .adventure-info-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+  position: relative;
 }
 
 .info-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   padding: 1.5rem;
   border-radius: 12px;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(233, 236, 239, 0.8);
   transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   backdrop-filter: blur(10px);
 }
 
 .info-card:hover {
-  background: #fff;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  border-color: #dee2e6;
-}
-
-.info-label {
-  font-size: 0.9rem;
-  color: #868e96;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-color: rgba(222, 226, 230, 0.9);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .info-value {
   font-size: 1.1rem;
   color: #2d3436;
-  font-weight: 600;
-}
-
-/* Itinerary Section */
-.adventure-itinerary {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 2rem;
-  border-radius: 16px;
-  border: 1px solid #e9ecef;
-  margin-top: 2rem;
-  backdrop-filter: blur(10px);
-}
-
-.adventure-itinerary h4 {
-  font-size: 1.8rem;
-  color: #2d3436;
-  margin: 0 0 1.5rem;
-  font-weight: 600;
-}
-
-.itinerary-content {
-  color: #4a4a4a;
-  line-height: 1.8;
-}
-
-.itinerary-content p {
-  margin: 0.75rem 0;
-  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 /* Animation */
@@ -137,38 +131,18 @@
   }
 }
 
-/* Error Message Styling */
-.error-message {
-  text-align: center;
-  padding: 3rem;
-  background: #fff5f5;
-  border-radius: 12px;
-  border: 1px solid #ffe3e3;
-  margin: 2rem;
-}
-
-.error-message h3 {
-  color: #e03131;
-  margin-bottom: 0.5rem;
-}
-
-.error-message p {
-  color: #495057;
-}
-
 /* Custom Scrollbar */
 .adventure-content::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .adventure-content::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
 }
 
 .adventure-content::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .adventure-content::-webkit-scrollbar-thumb:hover {
@@ -176,19 +150,34 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .adventure-content {
-    padding: 3rem;
+    padding: 4rem 5rem;
   }
   
   .adventure-title h3 {
-    font-size: 3rem;
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .content-fragment-wrapper {
+    grid-template-columns: 45% 55%;
+  }
+
+  .adventure-content {
+    padding: 3rem 4rem;
+  }
+  
+  .adventure-title h3 {
+    font-size: 2.5rem;
   }
 }
 
 @media (max-width: 1024px) {
   .content-fragment-wrapper {
     grid-template-columns: 1fr;
+    min-height: auto;
   }
 
   .adventure-image {
@@ -196,13 +185,7 @@
   }
 
   .adventure-content {
-    height: auto;
-    min-height: 50vh;
     padding: 2.5rem;
-  }
-
-  .adventure-info-cards {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -216,15 +199,11 @@
   }
 
   .adventure-title h3 {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 
-  .adventure-info-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .adventure-itinerary {
-    padding: 1.5rem;
+  .adventure-description {
+    font-size: 1.1rem;
   }
 }
 

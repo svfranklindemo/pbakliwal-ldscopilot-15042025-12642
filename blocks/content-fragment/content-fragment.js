@@ -28,11 +28,8 @@ export default function decorate(block) {
 fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug, {
   method: 'GET',
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Origin': window.location.origin
-  },
-  credentials: 'include' // This is needed if the AEM server requires authentication
+    mode: 'no-cors'
+  }
 })
 .then(response => {
   if (!response.ok) {

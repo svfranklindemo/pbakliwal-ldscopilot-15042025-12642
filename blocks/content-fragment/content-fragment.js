@@ -5,7 +5,7 @@ const AEM_HOST = checkDomain()
 function checkDomain(){
   if (window.location.hostname.includes("aem.page") || window.location.hostname.includes("localhost") || window.location.hostname.includes("aem.live")){
     // Use proxy path for development
-    return "/api/proxy/aem";    
+    return "https://publish-p121371-e1189853.adobeaemcloud.com";    
   } else {
     return window.location.origin 
   }

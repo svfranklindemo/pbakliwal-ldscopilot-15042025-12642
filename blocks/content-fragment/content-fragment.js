@@ -25,8 +25,21 @@ export default function decorate(block) {
   quoteDiv.replaceWith(adventureDiv);
 
 
-fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug)
-.then(response => response.json())
+fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug, {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Origin': window.location.origin
+  },
+  credentials: 'include' // This is needed if the AEM server requires authentication
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error('Network response was not ok: ' + response.status);
+  }
+  return response.json();
+})
 .then(response => {
 
 const backgroundImage = response.data.adventureList.items[0].primaryImage._path;

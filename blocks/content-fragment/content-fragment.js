@@ -56,27 +56,27 @@ document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureDes
 
 const adventureType = response.data.adventureList.items[0].adventureType;
 if(adventureType){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Adventure Type: " + adventureType + "</section>";
+document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureType + "</section>";
 }
 
 const tripLength = response.data.adventureList.items[0].tripLength;
 if(tripLength){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" +"Trip Length: " + tripLength + "</section>";
+document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripLength + "</section>";
 }
 
 const tripDifficulty = response.data.adventureList.items[0].difficulty;
 if(tripDifficulty){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Difficulty: " + tripDifficulty + "</section>";
+document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripDifficulty + "</section>";
 }
 
 const groupSize = response.data.adventureList.items[0].groupSize;
 if(groupSize){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Group Size: " + groupSize + "</section>";
+document.getElementById(adventureDiv.id).innerHTML += "<section>"+ groupSize + "</section>";
 }
 
 const tripItinerary= response.data.adventureList.items[0].itinerary.html;
 if(tripItinerary){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Itinerary: </br>" + tripItinerary + "</section>";
+document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripItinerary + "</section>";
 }
 
 })

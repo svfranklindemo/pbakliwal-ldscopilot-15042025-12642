@@ -1,101 +1,109 @@
 #adventure {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1400px;
+  margin: 2rem auto;
   padding: 2rem;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333;
-  background: linear-gradient(to right, #fff5f5, #fff);
-  border-radius: 12px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#adventure:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .content-fragment-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 45% 55%;
+  gap: 2.5rem;
+  align-items: start;
 }
 
-section {
-  position: relative !important;
-  padding: 0 !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-}
-
+/* Image Section */
 section:nth-child(1) {
-  width: 100%;
+  position: sticky !important;
+  top: 2rem !important;
+  height: fit-content;
+  border-radius: 16px;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 section:nth-child(1) img {
   width: 100%;
-  height: 400px;
+  height: 500px;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
-section:nth-child(1) img:hover {
-  transform: scale(1.03);
+section:nth-child(1):hover img {
+  transform: scale(1.05);
 }
 
+/* Content Sections */
+.content-fragment-wrapper > section:not(:first-child) {
+  padding: 0;
+  opacity: 0;
+  animation: slideIn 0.5s ease forwards;
+}
+
+/* Title Section */
 section:nth-child(2) h3 {
-  font-size: 2.5rem;
-  color: #333;
-  margin: 0 0 1rem;
-  font-weight: 600;
-  text-shadow: none;
+  font-size: 2.8rem;
+  color: #2d3436;
+  margin: 0 0 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  animation-delay: 0.1s;
 }
 
+/* Description Section */
 section:nth-child(3) {
   font-size: 1.1rem;
-  line-height: 1.6;
-  color: #666;
-  background: #fff;
-  padding: 1.5rem !important;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  line-height: 1.8;
+  color: #636e72;
+  margin-bottom: 2rem;
+  animation-delay: 0.2s;
 }
 
-/* Style for adventure details sections */
-section:nth-child(4),
-section:nth-child(5),
-section:nth-child(6),
-section:nth-child(7) {
+/* Info Cards Container */
+.content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7) {
   display: inline-block;
-  background: #fff;
-  padding: 1rem 1.5rem !important;
+  padding: 1rem 1.5rem;
   margin: 0.5rem;
-  border-radius: 6px;
-  color: #333;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  color: #2d3436;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  animation-delay: calc(var(--index) * 0.1s + 0.3s);
 }
 
-section:nth-child(4):hover,
-section:nth-child(5):hover,
-section:nth-child(6):hover,
-section:nth-child(7):hover {
-  transform: translateY(-2px);
-}
-
-/* Itinerary section */
-section:nth-child(8) {
+.content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7):hover {
   background: #fff;
-  padding: 2rem !important;
-  border-radius: 8px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: #dee2e6;
+}
+
+/* Itinerary Section */
+section:nth-child(8) {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 16px;
+  border: 1px solid #e9ecef;
+  animation-delay: 0.6s;
 }
 
 section:nth-child(8) p {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #444;
+  color: #4a4a4a;
   margin: 0.5rem 0;
 }
 
@@ -103,64 +111,64 @@ section:nth-child(8) p {
   display: none;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  #adventure {
-    padding: 1rem;
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Add labels to info sections */
+section:nth-child(4)::before { content: 'Adventure Type: '; font-weight: 600; }
+section:nth-child(5)::before { content: 'Trip Length: '; font-weight: 600; }
+section:nth-child(6)::before { content: 'Difficulty: '; font-weight: 600; }
+section:nth-child(7)::before { content: 'Group Size: '; font-weight: 600; }
+section:nth-child(8)::before { 
+  content: 'Itinerary';
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #2d3436;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content-fragment-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  section:nth-child(1) {
+    position: relative !important;
+    top: 0 !important;
   }
 
   section:nth-child(1) img {
-    height: 300px;
+    height: 400px;
   }
 
   section:nth-child(2) h3 {
-    font-size: 2rem;
-  }
-
-  section:nth-child(4),
-  section:nth-child(5),
-  section:nth-child(6),
-  section:nth-child(7) {
-    width: calc(50% - 1rem);
-    margin: 0.5rem;
+    font-size: 2.2rem;
   }
 }
 
-/* Add subtle animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@media (max-width: 768px) {
+  #adventure {
+    padding: 1rem;
+    margin: 1rem;
+  }
 
-.content-fragment-wrapper section {
-  animation: fadeIn 0.5s ease-out forwards;
-  animation-delay: calc(var(--section-index) * 0.1s);
-}
+  .content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7) {
+    width: calc(50% - 1.5rem);
+    font-size: 0.9rem;
+  }
 
-#adventure .text {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  background-color: #ebebeb;
-  padding: 3.5em 2em 2em;
-}
-
-img {
-  width: 1200px;
-}
-
-.content-fragment-wrapper h3 {
-  color: white;
-  font-size: 24px;
-  text-shadow: 1px 1px 2px #000;
-}
-
-.content-fragment-wrapper h2 {
-  color: white;  
-  font-size: 20px;
-  text-shadow: 1px 1px 2px #000
-}
-
-.section.content-fragment-container {
-  background-color: rgb(0 0 0 / 40%);
+  section:nth-child(8) {
+    padding: 1.5rem;
+  }
 }

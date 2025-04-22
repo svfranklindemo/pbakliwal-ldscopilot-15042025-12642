@@ -6,7 +6,7 @@
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 #adventure:hover {
@@ -17,158 +17,208 @@
 .content-fragment-wrapper {
   display: grid;
   grid-template-columns: 45% 55%;
-  gap: 2.5rem;
+  gap: 3rem;
   align-items: start;
 }
 
 /* Image Section */
-section:nth-child(1) {
+.adventure-image {
   position: sticky !important;
   top: 2rem !important;
-  height: fit-content;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
 }
 
-section:nth-child(1) img {
+.adventure-image:hover {
+  transform: scale(1.02);
+}
+
+.adventure-image img {
   width: 100%;
-  height: 500px;
+  height: 600px;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  vertical-align: middle;
 }
 
-section:nth-child(1):hover img {
-  transform: scale(1.05);
-}
-
-/* Content Sections */
-.content-fragment-wrapper > section:not(:first-child) {
-  padding: 0;
-  opacity: 0;
-  animation: slideIn 0.5s ease forwards;
+/* Content Container */
+.adventure-content {
+  padding-right: 2rem;
 }
 
 /* Title Section */
-section:nth-child(2) h3 {
+.adventure-title h3 {
   font-size: 2.8rem;
   color: #2d3436;
   margin: 0 0 1.5rem;
   font-weight: 700;
   line-height: 1.2;
-  animation-delay: 0.1s;
 }
 
 /* Description Section */
-section:nth-child(3) {
+.adventure-description {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #636e72;
-  margin-bottom: 2rem;
-  animation-delay: 0.2s;
+  margin-bottom: 2.5rem;
 }
 
 /* Info Cards Container */
-.content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7) {
-  display: inline-block;
-  padding: 1rem 1.5rem;
-  margin: 0.5rem;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  color: #2d3436;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  animation-delay: calc(var(--index) * 0.1s + 0.3s);
+.adventure-info-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
-.content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7):hover {
+.info-card {
+  background: #f8f9fa;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-card:hover {
   background: #fff;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   border-color: #dee2e6;
 }
 
-/* Itinerary Section */
-section:nth-child(8) {
-  margin-top: 2rem;
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 16px;
-  border: 1px solid #e9ecef;
-  animation-delay: 0.6s;
+.info-label {
+  font-size: 0.9rem;
+  color: #868e96;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-section:nth-child(8) p {
+.info-value {
   font-size: 1.1rem;
-  line-height: 1.8;
+  color: #2d3436;
+  font-weight: 600;
+}
+
+/* Itinerary Section */
+.adventure-itinerary {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid #e9ecef;
+  margin-top: 2rem;
+}
+
+.adventure-itinerary h4 {
+  font-size: 1.5rem;
+  color: #2d3436;
+  margin: 0 0 1.5rem;
+  font-weight: 600;
+}
+
+.itinerary-content {
   color: #4a4a4a;
+  line-height: 1.8;
+}
+
+.itinerary-content p {
   margin: 0.5rem 0;
 }
 
-#slug {
-  display: none;
+/* Animation */
+.animate-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--index) * 0.1s);
 }
 
-/* Animations */
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
-/* Add labels to info sections */
-section:nth-child(4)::before { content: 'Adventure Type: '; font-weight: 600; }
-section:nth-child(5)::before { content: 'Trip Length: '; font-weight: 600; }
-section:nth-child(6)::before { content: 'Difficulty: '; font-weight: 600; }
-section:nth-child(7)::before { content: 'Group Size: '; font-weight: 600; }
-section:nth-child(8)::before { 
-  content: 'Itinerary';
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #2d3436;
+/* Error Message Styling */
+.error-message {
+  text-align: center;
+  padding: 3rem;
+  background: #fff5f5;
+  border-radius: 12px;
+  border: 1px solid #ffe3e3;
+}
+
+.error-message h3 {
+  color: #e03131;
+  margin-bottom: 0.5rem;
+}
+
+.error-message p {
+  color: #495057;
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .content-fragment-wrapper {
+    gap: 2rem;
+  }
+  
+  .adventure-image img {
+    height: 500px;
+  }
+  
+  .adventure-title h3 {
+    font-size: 2.4rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .content-fragment-wrapper {
     grid-template-columns: 1fr;
   }
 
-  section:nth-child(1) {
+  .adventure-image {
     position: relative !important;
     top: 0 !important;
   }
 
-  section:nth-child(1) img {
-    height: 400px;
+  .adventure-content {
+    padding-right: 0;
   }
 
-  section:nth-child(2) h3 {
-    font-size: 2.2rem;
+  .adventure-info-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   #adventure {
-    padding: 1rem;
     margin: 1rem;
+    padding: 1rem;
   }
 
-  .content-fragment-wrapper > section:nth-child(n+4):nth-child(-n+7) {
-    width: calc(50% - 1.5rem);
-    font-size: 0.9rem;
+  .adventure-image img {
+    height: 300px;
   }
 
-  section:nth-child(8) {
+  .adventure-title h3 {
+    font-size: 2rem;
+  }
+
+  .adventure-info-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .adventure-itinerary {
     padding: 1.5rem;
   }
+}
+
+#slug {
+  display: none;
 }

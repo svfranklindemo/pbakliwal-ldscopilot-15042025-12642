@@ -38,50 +38,96 @@ fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug='
   return response.json();
 })
 .then(response => {
+  const adventure = response.data.adventureList.items[0];
+  
+  // Create the main container with wrapper
+  let htmlContent = `
+    <div class="content-fragment-wrapper">
+      <!-- Image Section -->
+      <section class="adventure-image">
+        ${adventure.primaryImage?._path ? 
+          `<img src="${AEM_HOST}${adventure.primaryImage._path}" alt="${adventure.title || 'Adventure Image'}" loading="lazy">` 
+          : ''}
+      </section>
 
-const backgroundImage = response.data.adventureList.items[0].primaryImage._path;
-if(backgroundImage){
-document.getElementById(adventureDiv.id).innerHTML = "<section><img src=" + AEM_HOST + backgroundImage + "></section>";  
-}
+      <!-- Content Container -->
+      <div class="adventure-content">
+        <!-- Title Section -->
+        ${adventure.title ? 
+          `<section class="adventure-title">
+            <h3>${adventure.title}</h3>
+          </section>` 
+          : ''}
 
-const adventureTitle = response.data.adventureList.items[0].title;
-if(adventureTitle){
-document.getElementById(adventureDiv.id).innerHTML += "<section><h3>"+ adventureTitle + "</h3></section>";
-}
+        <!-- Description Section -->
+        ${adventure.description?.plaintext ? 
+          `<section class="adventure-description">
+            <p>${adventure.description.plaintext}</p>
+          </section>` 
+          : ''}
 
-const adventureDesc = response.data.adventureList.items[0].description.plaintext;
-if(adventureDesc){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureDesc + "</section>";
-}
+        <!-- Info Cards Container -->
+        <div class="adventure-info-cards">
+          ${adventure.adventureType ? 
+            `<section class="info-card">
+              <span class="info-label">Adventure Type</span>
+              <span class="info-value">${adventure.adventureType}</span>
+            </section>` 
+            : ''}
+          
+          ${adventure.tripLength ? 
+            `<section class="info-card">
+              <span class="info-label">Trip Length</span>
+              <span class="info-value">${adventure.tripLength}</span>
+            </section>` 
+            : ''}
+          
+          ${adventure.difficulty ? 
+            `<section class="info-card">
+              <span class="info-label">Difficulty</span>
+              <span class="info-value">${adventure.difficulty}</span>
+            </section>` 
+            : ''}
+          
+          ${adventure.groupSize ? 
+            `<section class="info-card">
+              <span class="info-label">Group Size</span>
+              <span class="info-value">${adventure.groupSize}</span>
+            </section>` 
+            : ''}
+        </div>
 
-const adventureType = response.data.adventureList.items[0].adventureType;
-if(adventureType){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureType + "</section>";
-}
+        <!-- Itinerary Section -->
+        ${adventure.itinerary?.html ? 
+          `<section class="adventure-itinerary">
+            <h4>Itinerary</h4>
+            <div class="itinerary-content">
+              ${adventure.itinerary.html}
+            </div>
+          </section>` 
+          : ''}
+      </div>
+    </div>
+  `;
 
-const tripLength = response.data.adventureList.items[0].tripLength;
-if(tripLength){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripLength + "</section>";
-}
+  // Set the content
+  document.getElementById(adventureDiv.id).innerHTML = htmlContent;
 
-const tripDifficulty = response.data.adventureList.items[0].difficulty;
-if(tripDifficulty){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripDifficulty + "</section>";
-}
-
-const groupSize = response.data.adventureList.items[0].groupSize;
-if(groupSize){
-document.getElementById(adventureDiv.id).innerHTML += "<section>"+ groupSize + "</section>";
-}
-
-const tripItinerary= response.data.adventureList.items[0].itinerary.html;
-if(tripItinerary){
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + tripItinerary + "</section>";
-}
-
+  // Add animation classes with delay
+  const sections = document.querySelectorAll(`#${adventureDiv.id} section`);
+  sections.forEach((section, index) => {
+    section.style.setProperty('--index', index);
+    section.classList.add('animate-in');
+  });
 })
 .catch(error => {
   console.log('Error fetching data:', error);
+  document.getElementById(adventureDiv.id).innerHTML = `
+    <div class="error-message">
+      <h3>Unable to load adventure details</h3>
+      <p>Please try again later</p>
+    </div>
+  `;
 });
 
 }

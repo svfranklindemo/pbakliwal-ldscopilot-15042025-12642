@@ -21,7 +21,16 @@ export default function decorate(block) {
   quoteDiv.replaceWith(adventureDiv);
 
 
-fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug)
+fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug, {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'Origin': window.location.origin
+  },
+  credentials: 'same-origin',
+  mode: 'cors'
+})
 .then(response => response.json())
 .then(response => {
 
@@ -33,21 +42,6 @@ document.getElementById(adventureDiv.id).innerHTML += "<section><h3>"+ adventure
 
 const adventureDesc = response.data.adventureList.items[0].description.plaintext;
 document.getElementById(adventureDiv.id).innerHTML += "<section>" + adventureDesc + "</section>";
-
-const adventureType = response.data.adventureList.items[0].adventureType;
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Adventure Type: " + adventureType + "</section>";
-
-const tripLength = response.data.adventureList.items[0].tripLength;
-document.getElementById(adventureDiv.id).innerHTML += "<section>" +"Trip Length: " + tripLength + "</section>";
-
-const tripDifficulty = response.data.adventureList.items[0].difficulty;
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Difficulty: " + tripDifficulty + "</section>";
-
-const groupSize = response.data.adventureList.items[0].groupSize;
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Group Size: " + groupSize + "</section>";
-
-const tripItinerary= response.data.adventureList.items[0].itinerary.html;
-document.getElementById(adventureDiv.id).innerHTML += "<section>" + "Itinerary: </br>" + tripItinerary + "</section>";
 
 })
 .catch(error => {

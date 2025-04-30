@@ -57,10 +57,10 @@ main .carousel div.carousel-text:hover {
   transform: translateY(-5px);
 }
 
-main .carousel div.carousel-text h2 {
+main .carousel div.carousel-text h2,
+main .carousel div.carousel-text h1 {
   margin: 0;
   font-size: 4.5rem;
-  color: #fff;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -68,14 +68,32 @@ main .carousel div.carousel-text h2 {
   font-family: var(--heading-font-family, "Helvetica Neue", sans-serif);
 }
 
-main .carousel div.carousel-text p {
+main .carousel div.carousel-text h2 {
+  color: #fff;
+}
+
+main .carousel div.carousel-text h1 {
+  color: #000;
+}
+
+main .carousel div.carousel-text p,
+main .carousel div.carousel-text h3,
+main .carousel div.carousel-text h4 {
   margin: 1rem 0;
   line-height: 1.4;
-  color: #fff;
   font-size: 1.5rem;
   font-weight: 300;
   text-transform: none;
   opacity: 0.9;
+}
+
+main .carousel div.carousel-text p,
+main .carousel div.carousel-text h4 {
+  color: #fff;
+}
+
+main .carousel div.carousel-text h3 {
+  color: #000;
 }
 
 main .carousel div.carousel-text .button {

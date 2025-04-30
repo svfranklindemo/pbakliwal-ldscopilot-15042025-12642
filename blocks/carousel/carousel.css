@@ -87,12 +87,15 @@ main .carousel div.carousel-text h4 {
   opacity: 0.9;
 }
 
-main .carousel div.carousel-text p,
-main .carousel div.carousel-text h4 {
+main .carousel div.carousel-text p {
   color: #fff;
 }
 
 main .carousel div.carousel-text h3 {
+  color: #fff;
+}
+
+main .carousel div.carousel-text h4 {
   color: #000;
 }
 

@@ -14,12 +14,14 @@ export default function decorate(block) {
   slugDiv.replaceWith(slugID);
   slugID.innerHTML = `${slugDiv.innerHTML}`;
   const slug = slugID.textContent.trim();
-  
-  // Create the main adventure div
-  const quoteDiv = block.querySelector('div:last-of-type');
-  const adventureDiv = document.createElement('div');
-  adventureDiv.id = "adventure-" + slug; 
-  quoteDiv.replaceWith(adventureDiv);
+
+  // Mark this block for later rendering
+  block.setAttribute('data-adventure-slug', slug);
+
+  // Only fetch and render once per slug
+  if (!window._adventureRendered) window._adventureRendered = {};
+  if (window._adventureRendered[slug]) return;
+  window._adventureRendered[slug] = true;
 
   // Fetch the adventure data
   fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/adventure-by-slug;slug=' + slug, {
@@ -52,12 +54,19 @@ export default function decorate(block) {
       </div>
     `;
 
-    // Set the HTML content
-    document.getElementById(adventureDiv.id).innerHTML = html;
+    // Find all blocks with this slug and render
+    document.querySelectorAll('[data-adventure-slug="' + slug + '"]').forEach(block => {
+      // Remove all children
+      while (block.firstChild) block.removeChild(block.firstChild);
+      // Insert the HTML
+      block.innerHTML = html;
+    });
   })
   .catch(error => {
     console.error('Error fetching data:', error);
-    document.getElementById(adventureDiv.id).innerHTML = '<p>Error loading content fragment</p>';
+    document.querySelectorAll('[data-adventure-slug="' + slug + '"]').forEach(block => {
+      block.innerHTML = '<p>Error loading content fragment</p>';
+    });
   });
 }
 

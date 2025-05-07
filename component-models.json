@@ -221,6 +221,18 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "generic-content-fragment",
+    "fields": [
+      {
+        "component": "text-input",
+        "name": "text",
+        "value": "",
+        "label": "Slug",
+        "valueType": "string"
+      }
+    ]
   },  
   {
     "id": "article-content-fragment",

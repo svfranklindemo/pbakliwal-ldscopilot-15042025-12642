@@ -16,14 +16,14 @@ export default function decorate(block) {
   const slug = slugID.textContent.trim();
 
   // Mark this block for later rendering
-  block.setAttribute('data-adventure-slug', slug);
+  block.setAttribute('data-genericContent-slug', slug);
 
   // Only fetch and render once per slug
-  if (!window._adventureRendered) window._adventureRendered = {};
-  if (window._adventureRendered[slug]) return;
-  window._adventureRendered[slug] = true;
+  if (!window._genericContentRendered) window._genericContentRendered = {};
+  if (window._genericContentRendered[slug]) return;
+  window._genericContentRendered[slug] = true;
 
-  // Fetch the adventure data
+  // Fetch the genericContent data
   fetch(AEM_HOST + '/graphql/execute.json/aem-demo-assets/generic-cf-by-slug;slug=' + slug, {
     method: 'GET',
     headers: {
@@ -36,22 +36,36 @@ export default function decorate(block) {
   })
   .then(response => response.json())
   .then(response => {
-    const adventure = response.data.genericCfList.items[0];
-    const backgroundImage = adventure.primaryImage._path;
-    const adventureTitle = adventure.title;
-    const adventureDesc = adventure.description.plaintext;
+    // Null checks for data structure
+    if (!response || !response.data || !response.data.genericCfList || !Array.isArray(response.data.genericCfList.items) || response.data.genericCfList.items.length === 0) {
+      // Remove all blocks with this slug if data is missing
+      document.querySelectorAll('[data-genericContent-slug="' + slug + '"]').forEach(block => {
+        while (block.firstChild) block.removeChild(block.firstChild);
+      });
+      return;
+    }
+    const genericContent = response.data.genericCfList.items[0];
+    if (!genericContent || !genericContent.description || !genericContent.description.plaintext) {
+      document.querySelectorAll('[data-genericContent-slug="' + slug + '"]').forEach(block => {
+        while (block.firstChild) block.removeChild(block.firstChild);
+      });
+      return;
+    }
+    const backgroundImage = genericContent.primaryImage && genericContent.primaryImage._path ? genericContent.primaryImage._path : null;
+    const genericContentTitle = genericContent.title || '';
+    const genericContentDesc = genericContent.description.plaintext;
 
     // Create the HTML structure
     const html = `
-      <div class="cf-wrapper">
+      <div class="generic-cf-wrapper">
         <div class="text">
-          <p>${adventureDesc}</p>
+          <p>${genericContentDesc}</p>
         </div>
       </div>
     `;
 
     // Find all blocks with this slug and render
-    document.querySelectorAll('[data-adventure-slug="' + slug + '"]').forEach(block => {
+    document.querySelectorAll('[data-genericContent-slug="' + slug + '"]').forEach(block => {
       // Remove all children
       while (block.firstChild) block.removeChild(block.firstChild);
       // Insert the HTML
@@ -60,7 +74,7 @@ export default function decorate(block) {
   })
   .catch(error => {
     console.error('Error fetching data:', error);
-    document.querySelectorAll('[data-adventure-slug="' + slug + '"]').forEach(block => {
+    document.querySelectorAll('[data-genericContent-slug="' + slug + '"]').forEach(block => {
       block.innerHTML = '<p>Error loading content fragment</p>';
     });
   });

@@ -36,7 +36,7 @@ export default function decorate(block) {
   })
   .then(response => response.json())
   .then(response => {
-    const adventure = response.data.adventureList.items[0];
+    const adventure = response.data.genericCfList.items[0];
     const backgroundImage = adventure.primaryImage._path;
     const adventureTitle = adventure.title;
     const adventureDesc = adventure.description.plaintext;

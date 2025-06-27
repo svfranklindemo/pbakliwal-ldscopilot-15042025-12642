@@ -1,15 +1,16 @@
+import { uploadAsset } from './asset-upload.js';
 // Check if copilot parameter exists in URL
 const urlParams = new URLSearchParams(window.location.search);
 const shouldLoadCopilot = urlParams.has('copilotEditor') || urlParams.has('copilotPreview');
-
+ 
 if (shouldLoadCopilot) {
     // Initialize copilot when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('Initializing copilot...');
+        console.log('Initializing New copilot...');
         
-        const domain = urlParams.get('copilot') === 'prod' 
+        const domain = urlParams.get('copilot-prod') === '1' 
             ? 'copilot.adobedemo.com' 
-            : 'copilot-stage.adobedemo.com';
+            : 'stage.copilot.adobedemo.com';
 
         // Function to inject CSS
         const injectCSS = () => {
@@ -35,7 +36,7 @@ if (shouldLoadCopilot) {
                 const script = document.createElement('script');
                 script.id = 'copilot-editor-script';
                 script.type = 'module';
-                script.src = `https://${domain}/editor/editor.js`;
+                script.src = `https://${domain}/editor/editor.js?ims=explicit`;
                 
                 // Handle loading errors
                 script.onerror = () => console.error('Failed to load copilot script');
@@ -59,7 +60,16 @@ if (shouldLoadCopilot) {
         // Then inject script
         injectScript();
 
-        console.log('Copilot initialization complete');
+
+        console.log('New Copilot initialization complete');
+
+        document.addEventListener('copilot-publish', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const {projectId, demoId} = e.detail??{};
+            console.log('Copilot publish p:'+projectId + ' d:'+demoId);
+            uploadAsset();
+          })
     });
 
     // Backup initialization in case DOMContentLoaded already fired

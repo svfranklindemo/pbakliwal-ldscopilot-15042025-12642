@@ -1,48 +1,39 @@
 import { showLoader, hideLoader, showPopup } from './ui-utils.js';
 
+const urlParams = new URLSearchParams(window.location.search);
+const shouldLoadCopilot = urlParams.has('copilot-prod');
+let demoPilotDomain = 'https://demo-system-zoltar-demo-pilot-deploy-ethos101-stag-6229b6.stage.cloud.adobe.io';
+if (shouldLoadCopilot) {
+    demoPilotDomain = urlParams.get('copilot-prod') === '1' 
+            ? 'https://demo-system-zoltar-demo-pilot-deploy-ethos101-prod-23e40d.cloud.adobe.io' 
+            : 'https://demo-system-zoltar-demo-pilot-deploy-ethos101-stag-6229b6.stage.cloud.adobe.io';
+}
 // Function to get the authentication token
 const getAuthToken = () => {
-    try {
-        const tokenKey = 'adobeid_ims_access_token/demo-copilot/false/AdobeID,openid';
-        const tokenData = localStorage.getItem(tokenKey);
-        
-        if (!tokenData) {
-            console.error('No token found in localStorage');
-            return null;
-        }
-
-        const parsedToken = JSON.parse(tokenData);
-        return parsedToken.tokenValue;
-    } catch (error) {
-        console.error('Error parsing token from localStorage:', error);
-        return null;
-    }
+    return window.location.search.split('ims_token=')[1];
 };
 
-// Function to get user LDAP from session storage
-const getUserLdap = () => {
+// Function to get user LDAP (now returns email from IMS profile)
+const getUserLdap = async () => {
     try {
-        const profileKey = 'adobeid_ims_profile/demo-copilot/false/AdobeID,openid';
-        const profileData = sessionStorage.getItem(profileKey);
-        
-        if (!profileData) {
-            console.error('No profile data found in sessionStorage');
-            return 'pbakliwal';
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('Authentication token not found');
         }
-
-        const parsedProfile = JSON.parse(profileData);
-        const email = parsedProfile.email;
-        
-        if (!email) {
-            console.error('No email found in profile data');
-            return 'pbakliwal';
+        const response = await fetch(`${demoPilotDomain}/profile`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // Extract LDAP from email (assuming format: ldap@adobe.com)
-        const ldap = email.split('@')[0];
-        return ldap;
+        const profile = await response.json();
+        return profile.email.split('@')[0];
     } catch (error) {
-        console.error('Error parsing profile data from sessionStorage:', error);
+        console.error('Error fetching profile email:', error);
         return null;
     }
 };
@@ -68,7 +59,7 @@ const fetchProjectData = async (projectId) => {
             throw new Error('Authentication token not found');
         }
 
-        const response = await fetch(`https://btci3qnv43.execute-api.us-east-1.amazonaws.com/projects/${projectId}`, {
+        const response = await fetch(`${demoPilotDomain}/projects/${projectId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -244,7 +235,7 @@ const getPayloadUpdates = async () => {
             return null;
         }
 
-        const userLdap = getUserLdap();
+        const userLdap = await getUserLdap();
         if (!userLdap) {
             console.error('Could not retrieve user LDAP');
             return null;
@@ -259,13 +250,112 @@ const getPayloadUpdates = async () => {
             projectName: targetDemo.name || "defaultName",
             type: "xwlak-copilot-assisted",
             userLdap: userLdap,
-            aemURL: "https://author-p142310-e1462720.adobeaemcloud.com/",
+            aemURL: "https://author-p121371-e1189853.adobeaemcloud.com/",
             images: updates,
             demoId: targetDemo.id,
-            pagePath: pagePathVar
+            pagePath: pagePathVar,
+            projectId: ids.projectId
         };
     } catch (error) {
         console.error('Error getting payload updates:', error);
+        return null;
+    }
+};
+
+// Function to check if AEM instance is valid and running
+const checkAEMInstance = async () => {
+    try {
+        // Use HEAD request to just check if the image exists and instance is up
+        const response = await fetch('https://publish-p121371-e1189853.adobeaemcloud.com/content/dam/aem-demo-assets/en/activities/skiing/skitouring.jpg', {
+            method: 'HEAD',
+        });
+        return response.ok && response.status === 200;
+    } catch (error) {
+        console.error('Error checking AEM instance:', error);
+        return false;
+    }
+};
+
+// Function to update the targetUrl of a demo in a project
+const updateTargetUrl = async (projectId, demoId,targetUrl) => {
+    try {
+        const token = getAuthToken();
+        if (!token) {
+            console.error('Authentication token not found');
+            return;
+        }
+
+        // Fetch the current project data
+        const projectData = await fetchProjectData(projectId);
+        if (!projectData) {
+            console.error('Project data not found');
+            return;
+        }
+
+        // Find the specific demo in the project data
+        const targetDemo = projectData.demos.find(demo => demo.id === demoId);
+        if (!targetDemo) {
+            console.error('Demo not found in project data');
+            return;
+        }
+
+        // Prepare the PATCH payload, updating only targetUrl
+        const patchPayload = {
+            ...targetDemo,
+            targetUrl: targetUrl
+        };
+
+        // Send PATCH request
+        const patchUrl = `${demoPilotDomain}/projects/${projectId}/demos/${demoId}`;
+        const response = await fetch(patchUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*'
+            },
+            body: JSON.stringify(patchPayload)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to update targetUrl: ${response.status} - ${errorText}`);
+        } else {
+            console.log('targetUrl updated successfully');
+        }
+    } catch (error) {
+        console.error('Error updating targetUrl:', error);
+    }
+};
+
+// Function to get the targetUrl by calling an API with the content payload and extracting the repo name
+const getTargetUrl = async (content) => {
+    try {
+        // Use the provided API endpoint to fetch repo name
+        const apiUrl = 'https://275323-918sangriatortoise.adobeio-static.net/api/v1/web/dx-excshell-1/getRepoName';
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'
+            },
+            body: JSON.stringify(content)
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to fetch repo name: ${response.status} - ${errorText}`);
+            return null;
+        }
+        const repoName = await response.text();
+        if (repoName) {
+            // Construct the target URL using the repo name
+            return `https://main--${repoName}--svfranklindemo.aem.live/us/en/`;
+            //return null;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching repo name:', error);
         return null;
     }
 };
@@ -275,6 +365,14 @@ export async function uploadAsset() {
     try {
         showLoader();
         
+        //check if AEM instance is valid and running or not 
+        const aemInstance = await checkAEMInstance();
+        if (!aemInstance) {
+            hideLoader();
+            showPopup('AEM instance is not running. Please check the AEM instance. or reach out to LPB team', 'notice');
+            return { status: 'error', message: 'AEM instance is not valid or running' };
+        }
+
         // Check for token before proceeding
         const token = getAuthToken();
         if (!token) {
@@ -295,8 +393,10 @@ export async function uploadAsset() {
 
         console.log("payload for assets:", updates);
 
+        const prod_url = "https://275323-918sangriatortoise.adobeio-static.net/api/v1/web/dx-excshell-1/assets";
+        const stage_url = "https://275323-918sangriatortoise-stage.adobeio-static.net/api/v1/web/dx-excshell-1/assets";
         // Send request in no-cors mode
-        const response = await fetch('https://275323-918sangriatortoise-stage.adobeio-static.net/api/v1/web/dx-excshell-1/assets', {
+        const response = await fetch(prod_url, {
             method: 'POST',
             mode: 'no-cors',
             headers: {
@@ -308,6 +408,13 @@ export async function uploadAsset() {
 
         let content = await response.text()
         console.log('content from upload:', content);
+
+        const targetUrl = await getTargetUrl(updates) || window.location.origin+window.location.pathname;
+        //update targetUrl of demo ID using patch request
+        await updateTargetUrl(updates.projectId, updates.demoId,targetUrl)
+        
+        
+
         hideLoader();
         showPopup('Uploaded successfully', 'success');
         return { status: 'sent', message: 'Request sent in no-cors mode' };
